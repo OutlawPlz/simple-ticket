@@ -24,7 +24,9 @@
     },
 
     async update(ticket) {
-        await axios.patch(`/api/tickets/${ticket.id}`, { close: true });
+        await axios
+            .patch(`/api/tickets/${ticket.id}`, { status: 'closed' })
+            .then(() => this.index());
     },
 }">
     <h1 class="text-3xl font-bold">Tickets</h1>
@@ -32,7 +34,7 @@
         <template x-for="ticket in tickets" :key="ticket.id">
             <li>
                 <label class="flex gap-1.5 items-baseline">
-                    <input type="checkbox" name="" id="">
+                    <input type="checkbox" x-on:change="update(ticket)">
                     <div>
                         <span x-text="ticket.title" class="font-bold"></span> <br>
                         <span x-text="ticket.message"></span>
