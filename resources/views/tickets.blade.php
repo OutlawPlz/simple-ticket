@@ -13,6 +13,18 @@
 <div x-data="{
     tickets: [],
 
+    get openTickets() {
+        return this.tickets.filter(
+            (ticket) => ticket.status === 'open'
+        )
+    },
+
+    get closedTickets() {
+        return this.tickets.filter(
+            (ticket) => ticket.status === 'closed'
+        )
+    },
+
     async init() {
         await this.index();
     },
@@ -23,18 +35,42 @@
        this.tickets = response.data;
     },
 
-    async update(ticket) {
+    async update(ticket, status) {
         await axios
-            .patch(`/api/tickets/${ticket.id}`, { status: 'closed' })
+            .patch(`/api/tickets/${ticket.id}`, { status })
             .then(() => this.index());
     },
-}">
+}" class="m-6">
     <h1 class="text-3xl font-bold">Tickets</h1>
     <ul class="space-y-3 mt-6">
-        <template x-for="ticket in tickets" :key="ticket.id">
+        <template x-for="ticket in openTickets" :key="ticket.id">
             <li>
                 <label class="flex gap-1.5 items-baseline">
-                    <input type="checkbox" x-on:change="update(ticket)">
+                    <input
+                        type="checkbox"
+                        :checked="ticket.status === 'closed'"
+                        x-on:change="update(ticket, $event.target.checked ? 'closed' : 'open')"
+                    >
+                    <div>
+                        <span x-text="ticket.title" class="font-bold"></span> <br>
+                        <span x-text="ticket.message"></span>
+                    </div>
+                </label>
+            </li>
+        </template>
+    </ul>
+
+    <h2 class="text-2xl font-bold mt-8">Closed</h2>
+    <ul class="space-y-3 mt-4">
+        <template x-for="ticket in closedTickets" :key="ticket.id">
+            <li class="line-through">
+                <label class="flex gap-1.5 items-baseline">
+                    <input
+                        disabled
+                        type="checkbox"
+                        :checked="ticket.status === 'closed'"
+                        x-on:change="update(ticket, $event.target.checked ? 'closed' : 'open')"
+                    >
                     <div>
                         <span x-text="ticket.title" class="font-bold"></span> <br>
                         <span x-text="ticket.message"></span>
