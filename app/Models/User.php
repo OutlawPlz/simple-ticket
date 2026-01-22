@@ -6,6 +6,7 @@ namespace App\Models;
 use Coderflex\LaravelTicket\Concerns\HasTickets;
 use Coderflex\LaravelTicket\Contracts\CanUseTickets;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -46,5 +47,10 @@ class User extends Authenticatable implements CanUseTickets
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class, 'user_id');
     }
 }
