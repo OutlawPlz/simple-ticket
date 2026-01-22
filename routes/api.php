@@ -7,4 +7,4 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/tickets', function (Request $request) {});
+Route::get('/tickets', fn (Request $request) => \App\Models\Ticket::all());
