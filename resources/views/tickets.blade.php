@@ -6,8 +6,12 @@
     <title>Tickets</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        axios.defaults.headers.common['X-API-Secret'] = '{{ config('app.api_secret') }}';
+        axios.defaults.headers.common['Accept'] = 'application/json';
+    </script>
 </head>
 <body>
 <div x-data="{
